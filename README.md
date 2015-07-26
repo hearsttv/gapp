@@ -8,7 +8,7 @@ Gapp allows you to quickly author webservices without writing server boilerplate
 go get github.com/Hearst-DD/gapp
 ```
 
-NOTE: Gapp is used interally by Hearst DPDG and may change. If you want to use Gapp for you service, it is recommended that you vendor or fork the code.
+NOTE: Gapp is used interally by Hearst DPDG and may change. If you want to use Gapp for your service, it is recommended that you vendor or fork the code.
 
 ## Dependencies
 
