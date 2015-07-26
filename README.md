@@ -13,20 +13,20 @@ NOTE: Gapp is used interally by Hearst DPDG and may change. If you want to use G
 ## Dependencies
 
 Gapp uses the following popular tools to construct webservices: 
-* Gorilla Mux (http://www.gorillatoolkit.org/pkg/mux)
-* Negroni middleware (https://github.com/codegangsta/negroni)
-* Graceful (https://github.com/tylerb/graceful) 
+* **Gorilla Mux** (http://www.gorillatoolkit.org/pkg/mux)
+* **Negroni middleware** (https://github.com/codegangsta/negroni)
+* **Graceful shutdown** (https://github.com/tylerb/graceful) 
 
 ## Use
 
 Gapp works by providing a system of callbacks to initialize, run and manage a webservice. To use Gapp to power your service, create an app object that implements the interface. 
 
 Gapp callbacks suggest (but do not enforce) a clear file structure for your app: 
-* main.go simply instantiates and runs your app
-* app.go holds your implementation of the Gapp interface
-* resource.go contains package level vars and functions for resources such as loggers, database connections, etc.
-* handler.go contains your handler definitions
-* subpackages contain internal service functionality (DB wrappers, daemon goroutines, etc.)
+* **main.go** simply instantiates and runs your app
+* **app.go** holds your implementation of the Gapp interface
+* **resource.go** contains package level vars and functions for resources such as loggers, database connections, etc.
+* **handler.go** contains your handler definitions
+* **subpackages** contain internal service functionality (DB wrappers, daemon goroutines, etc.)
 
 See the following example for details.
 
