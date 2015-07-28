@@ -9,6 +9,7 @@ import (
 	"github.com/Hearst-DD/gapp"
 	"github.com/Hearst-DD/gappconfig"
 	"github.com/codegangsta/negroni"
+	"github.com/gorilla/mux"
 )
 
 type app struct {
@@ -43,15 +44,10 @@ func (a *app) InitResources(conf gappconfig.Config) {
 	logger.Printf("...done.")
 }
 
-func (a *app) SetHandlers(conf gappconfig.Config) []gapp.HandlerMapping {
-	return []gapp.HandlerMapping{
-		{"/hello/world", helloWorldHandler},
-	}
-}
+func (a *app) ConfigureRoutes(r *mux.Router, conf gappconfig.Config) {
+	r.HandleFunc("/hello/world", helloWorldHandler).Methods("GET")
 
-func (a *app) SetNotFoundHandler(conf gappconfig.Config) http.Handler {
 	// set a not found handler if desired, or use the default
-	return nil
 }
 
 func (a *app) SetMiddleware(conf gappconfig.Config) []negroni.Handler {

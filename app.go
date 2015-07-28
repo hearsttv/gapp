@@ -25,10 +25,8 @@ type Gapp interface {
 	ConfigureLogging(conf gappconfig.Config)
 	// InitResources callback is where the app would set up DB connections, start internal goroutine daemons, etc.
 	InitResources(conf gappconfig.Config)
-	// SetHandlers callback allows the app to set the webservice's handlers
-	SetHandlers(conf gappconfig.Config) []HandlerMapping
-	// SetNotFoundHandler callback allows the app to optionally set a 404 handler
-	SetNotFoundHandler(conf gappconfig.Config) http.Handler
+	// ConfigureRoutes callback allows the app to set the webservice's handlers
+	ConfigureRoutes(r *mux.Router, conf gappconfig.Config)
 	// SetMiddleware callback allows the app to set Negroni middleware handlers. Gapp comes with some handy middleware you can use.
 	SetMiddleware(conf gappconfig.Config) []negroni.Handler
 	// GetServerConf callback prompts the app for the host and port to listen on. The final return value is the length of time to allow handlers to finish on stop before shutting down the service.
@@ -47,10 +45,7 @@ func Run(app Gapp) {
 
 	r := mux.NewRouter()
 
-	for _, hm := range app.SetHandlers(config) {
-		r.HandleFunc(hm.Route, hm.Handler)
-	}
-	r.NotFoundHandler = app.SetNotFoundHandler(config)
+	app.ConfigureRoutes(r, config)
 
 	n := negroni.New(app.SetMiddleware(config)...)
 
