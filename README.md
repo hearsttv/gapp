@@ -34,6 +34,8 @@ See the following example for details.
 
 The example/ directory contains a full implementation of a Gapp app. To run it, cd into the example directory, build, run and visit localhost:4001/hello/world in your browser.
 
+[example/app.go](https://github.com/Hearst-DD/gapp/blob/master/example/app.go) contains the interesting stuff.
+
 Sample output: 
 ```bash
 Nathans-MacBook-Pro:example nate$ go install .
