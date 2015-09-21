@@ -3,6 +3,7 @@ package gapp
 import (
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 	"time"
 
@@ -45,10 +46,11 @@ func Test_LoggingMiddleware(t *testing.T) {
 
 	middleware := LoggingMiddleware(prelogFunc, postlogFunc)
 
+	assert.Equal(t, reflect.ValueOf(prelogFunc), reflect.ValueOf(middleware.(*loggingMiddleware).preLogFunc))
+	assert.Equal(t, reflect.ValueOf(postlogFunc), reflect.ValueOf(middleware.(*loggingMiddleware).postLogFunc))
+
 	middleware.ServeHTTP(rw, r, next)
 
 	assert.Equal(t, "postlogCalled", state)
 
 }
-
-// ResponseWriter nock
