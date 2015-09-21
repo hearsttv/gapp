@@ -52,5 +52,71 @@ func Test_LoggingMiddleware(t *testing.T) {
 	middleware.ServeHTTP(rw, r, next)
 
 	assert.Equal(t, "postlogCalled", state)
+}
 
+func Test_LoggingMiddleware_nilFuncs(t *testing.T) {
+	state := "start"
+
+	next := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "start", state)
+		state = "nextCalled"
+	}
+
+	r, err := http.NewRequest("GET", "http://example.com/foo/bar", nil)
+	assert.Nil(t, err) // sanity
+	rw := negroni.NewResponseWriter(httptest.NewRecorder())
+
+	middleware := LoggingMiddleware(nil, nil)
+
+	assert.Nil(t, middleware.(*loggingMiddleware).preLogFunc)
+	assert.Nil(t, middleware.(*loggingMiddleware).postLogFunc)
+
+	middleware.ServeHTTP(rw, r, next)
+
+	assert.Equal(t, "nextCalled", state)
+}
+
+func Test_RecoveryMiddleware(t *testing.T) {
+	called := false
+
+	recoverFunc := func(rw http.ResponseWriter, r *http.Request) {
+		assert.False(t, called)
+		called = true
+	}
+
+	next := func(w http.ResponseWriter, r *http.Request) {
+		// recover func is defered until after next()
+		assert.False(t, called)
+	}
+
+	r, err := http.NewRequest("GET", "http://example.com/foo/bar", nil)
+	assert.Nil(t, err) // sanity
+	rw := negroni.NewResponseWriter(httptest.NewRecorder())
+
+	middleware := RecoveryMiddleware(recoverFunc)
+
+	assert.Equal(t, reflect.ValueOf(recoverFunc), reflect.ValueOf(middleware.(*recoveryMiddleware).recoverFunc))
+
+	middleware.ServeHTTP(rw, r, next)
+
+	assert.True(t, called)
+}
+
+func Test_RecoveryMiddleware_nilRecoverFunc(t *testing.T) {
+	nextCalled := false
+	next := func(w http.ResponseWriter, r *http.Request) {
+		nextCalled = true
+	}
+
+	r, err := http.NewRequest("GET", "http://example.com/foo/bar", nil)
+	assert.Nil(t, err) // sanity
+	rw := negroni.NewResponseWriter(httptest.NewRecorder())
+
+	middleware := RecoveryMiddleware(nil)
+
+	assert.Nil(t, middleware.(*recoveryMiddleware).recoverFunc)
+
+	middleware.ServeHTTP(rw, r, next)
+
+	assert.True(t, nextCalled)
 }
