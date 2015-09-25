@@ -39,6 +39,19 @@ type Gapp interface {
 
 // Run runs a Gapp app object, using its callbacks to configure and fire events. Run blocks until the service is stopped.
 func Run(app Gapp) {
+	config, n := initApp(app)
+
+	host, port, gracefulTimeout := app.GetServerConf(config)
+	app.HandleStart(host, port)
+
+	doRunFunc(host+":"+strconv.Itoa(port), gracefulTimeout, n)
+
+	app.HandleStopped()
+}
+
+var doRunFunc = graceful.Run
+
+func initApp(app Gapp) (gappconfig.Config, *negroni.Negroni) {
 	config := app.LoadConfig()
 	app.ConfigureLogging(config)
 	app.InitResources(config)
@@ -51,10 +64,5 @@ func Run(app Gapp) {
 
 	n.UseHandler(r)
 
-	host, port, gracefulTimeout := app.GetServerConf(config)
-	app.HandleStart(host, port)
-
-	graceful.Run(host+":"+strconv.Itoa(port), gracefulTimeout, n)
-
-	app.HandleStopped()
+	return config, n
 }

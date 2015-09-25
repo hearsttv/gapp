@@ -1,0 +1,11 @@
+mode: set
+github.com/Hearst-DD/gapp/app.go:41.20,60.2 11 0
+github.com/Hearst-DD/gapp/middleware.go:20.100,24.2 1 1
+github.com/Hearst-DD/gapp/middleware.go:28.88,34.2 1 1
+github.com/Hearst-DD/gapp/middleware.go:36.106,37.28 1 1
+github.com/Hearst-DD/gapp/middleware.go:41.2,41.13 1 1
+github.com/Hearst-DD/gapp/middleware.go:37.28,39.3 1 1
+github.com/Hearst-DD/gapp/middleware.go:44.103,46.25 2 1
+github.com/Hearst-DD/gapp/middleware.go:50.2,52.26 2 1
+github.com/Hearst-DD/gapp/middleware.go:46.25,48.3 1 1
+github.com/Hearst-DD/gapp/middleware.go:52.26,55.3 2 1
