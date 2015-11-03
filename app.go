@@ -17,6 +17,17 @@ type HandlerMapping struct {
 	Handler func(rw http.ResponseWriter, r *http.Request)
 }
 
+// ServerConfig encapsulates the various values needed to start the server
+type ServerConfig struct {
+	Host              string
+	Port              int
+	GracefulTimeout   time.Duration
+	HTTPSEnabled      bool
+	HTTPDisabled      bool
+	TLSCertFile       string
+	TLSPrivateKeyFile string
+}
+
 // Gapp defines the callback interface that a webservice must implement
 type Gapp interface {
 	// LoadConfig callback allows the app to load the app config. Optionally save the config as a resource for use outside of callbacks
@@ -30,7 +41,7 @@ type Gapp interface {
 	// SetMiddleware callback allows the app to set Negroni middleware handlers. Gapp comes with some handy middleware you can use.
 	SetMiddleware(conf gappconfig.Config) []negroni.Handler
 	// GetServerConf callback prompts the app for the host and port to listen on. The final return value is the length of time to allow handlers to finish on stop before shutting down the service.
-	GetServerConf(conf gappconfig.Config) (host string, port int, gracefulTimeout time.Duration)
+	GetServerConf(conf gappconfig.Config) ServerConfig
 	// HandleStart callback is fired right before the service starts listening
 	HandleStart(host string, port int)
 	// HandleStopped callback is fired after the app has stopped listening. Teardown code should go here.
@@ -41,10 +52,27 @@ type Gapp interface {
 func Run(app Gapp) {
 	config, n := initApp(app)
 
-	host, port, gracefulTimeout := app.GetServerConf(config)
-	app.HandleStart(host, port)
+	serverConfig := app.GetServerConf(config)
+	app.HandleStart(serverConfig.Host, serverConfig.Port)
 
-	doRunFunc(host+":"+strconv.Itoa(port), gracefulTimeout, n)
+	srv := &graceful.Server{
+		Timeout: serverConfig.GracefulTimeout,
+
+		Server: &http.Server{
+			Addr:    serverConfig.Host + ":" + strconv.Itoa(serverConfig.Port),
+			Handler: n,
+		},
+	}
+
+	if serverConfig.HTTPDisabled && !serverConfig.HTTPSEnabled {
+		panic("must accept at least one scheme (HTTP and/or HTTPS)")
+	}
+
+	if serverConfig.HTTPSEnabled {
+		srv.ListenAndServeTLS(serverConfig.TLSCertFile, serverConfig.TLSPrivateKeyFile)
+	} else {
+		srv.ListenAndServe()
+	}
 
 	app.HandleStopped()
 }

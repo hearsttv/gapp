@@ -53,8 +53,12 @@ func (a *testapp) SetMiddleware(conf gappconfig.Config) []negroni.Handler {
 	return handlers
 }
 
-func (a *testapp) GetServerConf(conf gappconfig.Config) (host string, port int, gracefulTimeout time.Duration) {
-	return "localhost", 8080, time.Minute
+func (a *testapp) GetServerConf(conf gappconfig.Config) ServerConfig {
+	return ServerConfig{
+		Host:            "localhost",
+		Port:            8080,
+		GracefulTimeout: time.Minute,
+	}
 }
 
 func (a *testapp) HandleStart(host string, port int) {
