@@ -3,6 +3,7 @@ package gapp
 import (
 	"net/http"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/Hearst-DD/gappconfig"
@@ -24,6 +25,7 @@ type ServerConfig struct {
 	GracefulTimeout   time.Duration
 	HTTPSEnabled      bool
 	HTTPDisabled      bool
+	TLSPort           int
 	TLSCertFile       string
 	TLSPrivateKeyFile string
 }
@@ -55,24 +57,44 @@ func Run(app Gapp) {
 	serverConfig := app.GetServerConf(config)
 	app.HandleStart(serverConfig.Host, serverConfig.Port)
 
-	srv := &graceful.Server{
-		Timeout: serverConfig.GracefulTimeout,
-
-		Server: &http.Server{
-			Addr:    serverConfig.Host + ":" + strconv.Itoa(serverConfig.Port),
-			Handler: n,
-		},
-	}
-
 	if serverConfig.HTTPDisabled && !serverConfig.HTTPSEnabled {
 		panic("must accept at least one scheme (HTTP and/or HTTPS)")
 	}
 
+	var wg sync.WaitGroup
+
 	if serverConfig.HTTPSEnabled {
-		srv.ListenAndServeTLS(serverConfig.TLSCertFile, serverConfig.TLSPrivateKeyFile)
-	} else {
-		srv.ListenAndServe()
+		go func() {
+			defer wg.Done()
+
+			srv := &graceful.Server{
+				Timeout: serverConfig.GracefulTimeout,
+
+				Server: &http.Server{
+					Addr:    serverConfig.Host + ":" + strconv.Itoa(serverConfig.TLSPort),
+					Handler: n,
+				},
+			}
+			srv.ListenAndServeTLS(serverConfig.TLSCertFile, serverConfig.TLSPrivateKeyFile)
+		}()
 	}
+	if !serverConfig.HTTPDisabled {
+		go func() {
+			defer wg.Done()
+
+			srv := &graceful.Server{
+				Timeout: serverConfig.GracefulTimeout,
+
+				Server: &http.Server{
+					Addr:    serverConfig.Host + ":" + strconv.Itoa(serverConfig.Port),
+					Handler: n,
+				},
+			}
+			srv.ListenAndServe()
+		}()
+	}
+
+	wg.Wait()
 
 	app.HandleStopped()
 }
