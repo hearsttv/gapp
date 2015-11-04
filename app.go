@@ -75,7 +75,10 @@ func Run(app Gapp) {
 					Handler: n,
 				},
 			}
-			srv.ListenAndServeTLS(serverConfig.TLSCertFile, serverConfig.TLSPrivateKeyFile)
+			err := srv.ListenAndServeTLS(serverConfig.TLSCertFile, serverConfig.TLSPrivateKeyFile)
+			if err != nil {
+				panic(err)
+			}
 		}()
 	}
 	if !serverConfig.HTTPDisabled {
