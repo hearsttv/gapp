@@ -64,6 +64,7 @@ func Run(app Gapp) {
 	var wg sync.WaitGroup
 
 	if serverConfig.HTTPSEnabled {
+		wg.Add(1)
 		go func() {
 			defer wg.Done()
 
@@ -82,6 +83,7 @@ func Run(app Gapp) {
 		}()
 	}
 	if !serverConfig.HTTPDisabled {
+		wg.Add(1)
 		go func() {
 			defer wg.Done()
 
