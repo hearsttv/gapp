@@ -23,8 +23,6 @@ type ServerConfig struct {
 	Host              string
 	Port              int
 	GracefulTimeout   time.Duration
-	HTTPSEnabled      bool
-	HTTPDisabled      bool
 	TLSPort           int
 	TLSCertFile       string
 	TLSPrivateKeyFile string
@@ -45,7 +43,7 @@ type Gapp interface {
 	// GetServerConf callback prompts the app for the host and port to listen on. The final return value is the length of time to allow handlers to finish on stop before shutting down the service.
 	GetServerConf(conf gappconfig.Config) ServerConfig
 	// HandleStart callback is fired right before the service starts listening
-	HandleStart(host string, port int)
+	HandleStart(host string, port, tlsPort int)
 	// HandleStopped callback is fired after the app has stopped listening. Teardown code should go here.
 	HandleStopped()
 }
@@ -55,34 +53,15 @@ func Run(app Gapp) {
 	config, n := initApp(app)
 
 	serverConfig := app.GetServerConf(config)
-	app.HandleStart(serverConfig.Host, serverConfig.Port)
+	app.HandleStart(serverConfig.Host, serverConfig.Port, serverConfig.TLSPort)
 
-	if serverConfig.HTTPDisabled && !serverConfig.HTTPSEnabled {
-		panic("must accept at least one scheme (HTTP and/or HTTPS)")
+	if serverConfig.Port <= 0 && serverConfig.TLSPort <= 0 {
+		panic("No ports specified. Must accept at least one scheme (HTTP and/or HTTPS).")
 	}
 
 	var wg sync.WaitGroup
 
-	if serverConfig.HTTPSEnabled {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-
-			srv := &graceful.Server{
-				Timeout: serverConfig.GracefulTimeout,
-
-				Server: &http.Server{
-					Addr:    serverConfig.Host + ":" + strconv.Itoa(serverConfig.TLSPort),
-					Handler: n,
-				},
-			}
-			err := srv.ListenAndServeTLS(serverConfig.TLSCertFile, serverConfig.TLSPrivateKeyFile)
-			if err != nil {
-				panic(err)
-			}
-		}()
-	}
-	if !serverConfig.HTTPDisabled {
+	if serverConfig.Port > 0 {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
@@ -96,6 +75,23 @@ func Run(app Gapp) {
 				},
 			}
 			srv.ListenAndServe()
+		}()
+	}
+
+	if serverConfig.TLSPort > 0 {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+
+			srv := &graceful.Server{
+				Timeout: serverConfig.GracefulTimeout,
+
+				Server: &http.Server{
+					Addr:    serverConfig.Host + ":" + strconv.Itoa(serverConfig.TLSPort),
+					Handler: n,
+				},
+			}
+			srv.ListenAndServeTLS(serverConfig.TLSCertFile, serverConfig.TLSPrivateKeyFile)
 		}()
 	}
 
