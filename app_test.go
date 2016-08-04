@@ -61,7 +61,7 @@ func (a *testapp) GetServerConf(conf gappconfig.Config) ServerConfig {
 	}
 }
 
-func (a *testapp) HandleStart(host string, port int) {
+func (a *testapp) HandleStart(host string, port, tlsPort int) {
 	// noop
 }
 

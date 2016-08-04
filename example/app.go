@@ -65,14 +65,15 @@ func (a *app) SetMiddleware(conf gappconfig.Config) []negroni.Handler {
 	}
 }
 
-func (a *app) GetServerConf(conf gappconfig.Config) (host string, port int, gracefulTimeout time.Duration) {
-	host = conf.String("HOST")
-	port = conf.Int("PORT")
-	gracefulTimeout = time.Second * 10
-	return
+func (a *app) GetServerConf(conf gappconfig.Config) gapp.ServerConfig {
+	return gapp.ServerConfig{
+		Host:            conf.String("HOST"),
+		Port:            conf.Int("PORT"),
+		GracefulTimeout: time.Second * 10,
+	}
 }
 
-func (a *app) HandleStart(host string, port int) {
+func (a *app) HandleStart(host string, port, tlsPort int) {
 	logger.Printf("service started on %s:%d...", host, port)
 }
 
