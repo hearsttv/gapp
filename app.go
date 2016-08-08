@@ -23,6 +23,8 @@ type ServerConfig struct {
 	Host              string
 	Port              int
 	GracefulTimeout   time.Duration
+	ReadTimeout       time.Duration
+	WriteTimeout      time.Duration
 	TLSPort           int
 	TLSCertFile       string
 	TLSPrivateKeyFile string
@@ -70,8 +72,10 @@ func Run(app Gapp) {
 				Timeout: serverConfig.GracefulTimeout,
 
 				Server: &http.Server{
-					Addr:    serverConfig.Host + ":" + strconv.Itoa(serverConfig.Port),
-					Handler: n,
+					Addr:         serverConfig.Host + ":" + strconv.Itoa(serverConfig.Port),
+					Handler:      n,
+					WriteTimeout: serverConfig.WriteTimeout,
+					ReadTimeout:  serverConfig.ReadTimeout,
 				},
 			}
 			srv.ListenAndServe()
@@ -87,8 +91,10 @@ func Run(app Gapp) {
 				Timeout: serverConfig.GracefulTimeout,
 
 				Server: &http.Server{
-					Addr:    serverConfig.Host + ":" + strconv.Itoa(serverConfig.TLSPort),
-					Handler: n,
+					Addr:         serverConfig.Host + ":" + strconv.Itoa(serverConfig.TLSPort),
+					Handler:      n,
+					WriteTimeout: serverConfig.WriteTimeout,
+					ReadTimeout:  serverConfig.ReadTimeout,
 				},
 			}
 			srv.ListenAndServeTLS(serverConfig.TLSCertFile, serverConfig.TLSPrivateKeyFile)
