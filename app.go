@@ -9,6 +9,7 @@ import (
 	"github.com/Hearst-DD/gappconfig"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 	"github.com/stretchr/graceful"
 )
 
@@ -113,12 +114,17 @@ func initApp(app Gapp) (gappconfig.Config, *negroni.Negroni) {
 	app.ConfigureLogging(config)
 	app.InitResources(config)
 
+	c := cors.New(cors.Options{
+		AllowedOrigins:  []string{config.String("CORS_ALLOWED_ORIGINS")},
+	})
+
 	r := mux.NewRouter()
 
 	app.ConfigureRoutes(r, config)
 
 	n := negroni.New(app.SetMiddleware(config)...)
 
+	n.Use(c);
 	n.UseHandler(r)
 
 	return config, n
