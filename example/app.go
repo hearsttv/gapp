@@ -6,10 +6,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/Hearst-DD/gapp"
-	"github.com/Hearst-DD/gappconfig"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
+	"github.com/hearsttv/gapp"
 )
 
 type app struct {
@@ -19,8 +18,8 @@ func NewExampleApp() *app {
 	return &app{}
 }
 
-func (a *app) LoadConfig() gappconfig.Config {
-	config = gappconfig.New("MYAPP_", gappconfig.Map{
+func (a *app) LoadConfig() gapp.Config {
+	config = gapp.New("MYAPP_", gapp.Map{
 		{"ENV", "dev"},
 		{"PRETTY", true},
 		{"HOST", "localhost"},
@@ -29,14 +28,14 @@ func (a *app) LoadConfig() gappconfig.Config {
 	return config
 }
 
-func (a *app) ConfigureLogging(conf gappconfig.Config) {
+func (a *app) ConfigureLogging(conf gapp.Config) {
 	// do custom log configuration here...
 	logger = log.New(os.Stdout, "MYAPP ", log.LstdFlags)
 
 	logger.Printf("logging configured.")
 }
 
-func (a *app) InitResources(conf gappconfig.Config) {
+func (a *app) InitResources(conf gapp.Config) {
 	logger.Printf("initializing...")
 
 	// initialize things like database connections, daemon threads, etc.
@@ -44,13 +43,13 @@ func (a *app) InitResources(conf gappconfig.Config) {
 	logger.Printf("...done.")
 }
 
-func (a *app) ConfigureRoutes(r *mux.Router, conf gappconfig.Config) {
+func (a *app) ConfigureRoutes(r *mux.Router, conf gapp.Config) {
 	r.HandleFunc("/hello/world", helloWorldHandler).Methods("GET")
 
 	// set a not found handler if desired, or use the default
 }
 
-func (a *app) SetMiddleware(conf gappconfig.Config) []negroni.Handler {
+func (a *app) SetMiddleware(conf gapp.Config) []negroni.Handler {
 	return []negroni.Handler{
 		gapp.RecoveryMiddleware(func(rw http.ResponseWriter, r *http.Request) {
 			if err := recover(); err != nil {
@@ -65,7 +64,7 @@ func (a *app) SetMiddleware(conf gappconfig.Config) []negroni.Handler {
 	}
 }
 
-func (a *app) GetServerConf(conf gappconfig.Config) gapp.ServerConfig {
+func (a *app) GetServerConf(conf gapp.Config) gapp.ServerConfig {
 	return gapp.ServerConfig{
 		Host:            conf.String("HOST"),
 		Port:            conf.Int("PORT"),
