@@ -6,7 +6,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Hearst-DD/gappconfig"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/graceful"
@@ -33,17 +32,17 @@ type ServerConfig struct {
 // Gapp defines the callback interface that a webservice must implement
 type Gapp interface {
 	// LoadConfig callback allows the app to load the app config. Optionally save the config as a resource for use outside of callbacks
-	LoadConfig() gappconfig.Config
+	LoadConfig() Config
 	// ConfigureLogging callback allows the app to do any custom log configuration (i.e. based on environmental config)
-	ConfigureLogging(conf gappconfig.Config)
+	ConfigureLogging(conf Config)
 	// InitResources callback is where the app would set up DB connections, start internal goroutine daemons, etc.
-	InitResources(conf gappconfig.Config)
+	InitResources(conf Config)
 	// ConfigureRoutes callback allows the app to set the webservice's handlers
-	ConfigureRoutes(r *mux.Router, conf gappconfig.Config)
+	ConfigureRoutes(r *mux.Router, conf Config)
 	// SetMiddleware callback allows the app to set Negroni middleware handlers. Gapp comes with some handy middleware you can use.
-	SetMiddleware(conf gappconfig.Config) []negroni.Handler
+	SetMiddleware(conf Config) []negroni.Handler
 	// GetServerConf callback prompts the app for the host and port to listen on. The final return value is the length of time to allow handlers to finish on stop before shutting down the service.
-	GetServerConf(conf gappconfig.Config) ServerConfig
+	GetServerConf(conf Config) ServerConfig
 	// HandleStart callback is fired right before the service starts listening
 	HandleStart(host string, port, tlsPort int)
 	// HandleStopped callback is fired after the app has stopped listening. Teardown code should go here.
@@ -108,7 +107,7 @@ func Run(app Gapp) {
 
 var doRunFunc = graceful.Run
 
-func initApp(app Gapp) (gappconfig.Config, *negroni.Negroni) {
+func initApp(app Gapp) (Config, *negroni.Negroni) {
 	config := app.LoadConfig()
 	app.ConfigureLogging(config)
 	app.InitResources(config)

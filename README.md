@@ -5,7 +5,7 @@ Gapp allows you to quickly author webservices without writing server boilerplate
 ## Install
 
 ```bash
-go get github.com/Hearst-DD/gapp
+go get github.com/hearsttv/gapp
 ```
 
 NOTE: Gapp is used interally by Hearst DPDG and may change. If you want to use Gapp for your service, it is recommended that you vendor or fork the code.
@@ -34,7 +34,7 @@ See the following example for details.
 
 The example/ directory contains a full implementation of a Gapp app. To run it, cd into the example directory, build, run and visit localhost:4001/hello/world in your browser.
 
-[example/app.go](https://github.com/Hearst-DD/gapp/blob/master/example/app.go) contains the interesting stuff.
+[example/app.go](https://github.com/hearsttv/gapp/blob/master/example/app.go) contains the interesting stuff.
 
 Sample output: 
 ```bash

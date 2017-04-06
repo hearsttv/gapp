@@ -1,6 +1,6 @@
 package main
 
-import "github.com/Hearst-DD/gapp"
+import "github.com/hearsttv/gapp"
 
 func main() {
 	app := NewExampleApp()

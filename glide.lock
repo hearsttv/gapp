@@ -1,21 +1,21 @@
-hash: aac3f743e78a6939f7c69a10a945b9969642cb384c2b8d186351a20e2fa10b14
-updated: 2016-08-04T09:30:04.550461923-07:00
+hash: f76017afabf7ad53cc166922c8f850a956815455065c1a88ee59a0f9b934aef8
+updated: 2017-04-05T15:40:40.310167066-07:00
 imports:
 - name: github.com/codegangsta/negroni
   version: fde5e16d32adc7ad637e9cd9ad21d4ebc6192535
 - name: github.com/gorilla/context
-  version: aed02d124ae4a0e94fea4541c8effd05bf0c8296
+  version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
 - name: github.com/gorilla/mux
-  version: 0eeaf8392f5b04950925b8a69fe70f110fa7cbfc
+  version: 392c28fe23e1c45ddba891b0320b3b5df220beea
 - name: github.com/stretchr/graceful
-  version: c838c13b2beeea4f4f54496da96a3a6ae567c37a
+  version: 4654dfbb6ad53cb5e27f37d99b02e16c1872fbbb
 - name: github.com/urfave/negroni
-  version: 6edff56736fa7bd546812f149e8cdaae61e5a38f
+  version: c0db5feaa33826cd5117930c8f4ee5c0f565eec6
 - name: gopkg.in/tylerb/graceful.v1
-  version: c838c13b2beeea4f4f54496da96a3a6ae567c37a
+  version: 4654dfbb6ad53cb5e27f37d99b02e16c1872fbbb
 testImports:
 - name: github.com/davecgh/go-spew
-  version: 2df174808ee097f90d259e432cc04442cf60be21
+  version: 6d212800a42e8ab5c146b8ace3490ee17e5225f9
   subpackages:
   - spew
 - name: github.com/pmezard/go-difflib
@@ -23,6 +23,6 @@ testImports:
   subpackages:
   - difflib
 - name: github.com/stretchr/testify
-  version: f390dcf405f7b83c997eac1b06768bb9f44dec18
+  version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
   subpackages:
   - assert

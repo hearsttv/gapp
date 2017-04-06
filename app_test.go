@@ -5,13 +5,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Hearst-DD/gappconfig"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 )
 
-var conf = gappconfig.New("FOO_", gappconfig.Map{
+var conf = New("FOO_", Map{
 	{"BAR", "baz"},
 })
 
@@ -26,34 +25,34 @@ type testapp struct {
 	t *testing.T
 }
 
-func (a *testapp) LoadConfig() gappconfig.Config {
+func (a *testapp) LoadConfig() Config {
 	assert.Equal(a.t, "start", state)
 	state = "LoadConfigCalled"
 	return conf
 }
 
-func (a *testapp) ConfigureLogging(conf gappconfig.Config) {
+func (a *testapp) ConfigureLogging(conf Config) {
 	assert.Equal(a.t, "LoadConfigCalled", state)
 	state = "ConfigureLoggingCalled"
 }
 
-func (a *testapp) InitResources(conf gappconfig.Config) {
+func (a *testapp) InitResources(conf Config) {
 	assert.Equal(a.t, "ConfigureLoggingCalled", state)
 	state = "InitResourcesCalled"
 }
 
-func (a *testapp) ConfigureRoutes(r *mux.Router, conf gappconfig.Config) {
+func (a *testapp) ConfigureRoutes(r *mux.Router, conf Config) {
 	assert.Equal(a.t, "InitResourcesCalled", state)
 	state = "ConfigureRoutesCalled"
 }
 
-func (a *testapp) SetMiddleware(conf gappconfig.Config) []negroni.Handler {
+func (a *testapp) SetMiddleware(conf Config) []negroni.Handler {
 	assert.Equal(a.t, "ConfigureRoutesCalled", state)
 	state = "SetMiddlewareCalled"
 	return handlers
 }
 
-func (a *testapp) GetServerConf(conf gappconfig.Config) ServerConfig {
+func (a *testapp) GetServerConf(conf Config) ServerConfig {
 	return ServerConfig{
 		Host:            "localhost",
 		Port:            8080,
