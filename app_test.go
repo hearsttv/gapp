@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var conf = New("FOO_", Map{
+var conf = NewConfig("FOO_", ConfigMap{
 	{"BAR", "baz"},
 })
 

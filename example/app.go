@@ -19,7 +19,7 @@ func NewExampleApp() *app {
 }
 
 func (a *app) LoadConfig() gapp.Config {
-	config = gapp.New("MYAPP_", gapp.Map{
+	config = gapp.NewConfig("MYAPP_", gapp.ConfigMap{
 		{"ENV", "dev"},
 		{"PRETTY", true},
 		{"HOST", "localhost"},

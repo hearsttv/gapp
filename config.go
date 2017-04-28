@@ -14,9 +14,9 @@ type Config interface {
 	Duration(key string) time.Duration
 }
 
-type Map []MapEntry
+type ConfigMap []ConfigMapEntry
 
-type MapEntry struct {
+type ConfigMapEntry struct {
 	Key     string
 	Default interface{}
 }
@@ -28,7 +28,7 @@ type config struct {
 	durations map[string]time.Duration
 }
 
-func New(prefix string, m Map) Config {
+func NewConfig(prefix string, m ConfigMap) Config {
 	result := &config{
 		ints:      make(map[string]int),
 		strings:   make(map[string]string),
