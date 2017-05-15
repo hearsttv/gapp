@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codegangsta/negroni"
 	"github.com/stretchr/testify/assert"
+	"github.com/urfave/negroni"
 )
 
 func Test_LoggingMiddleware(t *testing.T) {

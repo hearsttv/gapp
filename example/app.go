@@ -6,9 +6,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/hearsttv/gapp"
+	"github.com/urfave/negroni"
 )
 
 type app struct {

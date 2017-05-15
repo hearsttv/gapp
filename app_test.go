@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
+	"github.com/urfave/negroni"
 )
 
 var conf = NewConfig("FOO_", ConfigMap{

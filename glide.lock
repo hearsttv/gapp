@@ -1,8 +1,6 @@
 hash: 55b7c0c70c5d997ee5bfbd77d0da13443434578bff6c6d2dcb8eae1016a9e539
-updated: 2017-05-15T11:27:43.690785661-07:00
+updated: 2017-05-15T11:34:52.230887724-07:00
 imports:
-- name: github.com/codegangsta/negroni
-  version: fde5e16d32adc7ad637e9cd9ad21d4ebc6192535
 - name: github.com/gorilla/context
   version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
 - name: github.com/gorilla/mux

@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/graceful"
+	"github.com/urfave/negroni"
 )
 
 // HandlerMapping is used to allow an app to attach its handlers to the Gorilla mux.
