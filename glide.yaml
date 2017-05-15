@@ -1,11 +1,12 @@
 package: github.com/hearsttv/gapp
 import:
-- package: github.com/codegangsta/negroni
+- package: github.com/urfave/negroni
   version: v0.2.0
 - package: github.com/gorilla/mux
   version: v1.3.0
 - package: github.com/stretchr/graceful
   version: v1.2.15
+- package: github.com/NYTimes/gziphandler
 testImport:
 - package: github.com/stretchr/testify
   version: v1.1.4
