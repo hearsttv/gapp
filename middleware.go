@@ -19,7 +19,7 @@ type loggingMiddleware struct {
 
 type gzipMiddleware struct{}
 
-// RecoveryMiddleware creates a middleware to handle panics during requests with the supplied func
+// RecoveryMiddleware creates a middleware to handle panics during requests with the supplied func.
 func RecoveryMiddleware(recoverFunc func(rw http.ResponseWriter, r *http.Request)) negroni.Handler {
 	return &recoveryMiddleware{
 		recoverFunc: recoverFunc,
@@ -27,6 +27,7 @@ func RecoveryMiddleware(recoverFunc func(rw http.ResponseWriter, r *http.Request
 }
 
 // LoggingMiddleware creates a middleware to log before and after requests. Nil pre or post funcs are OK.
+// Note: the post-request logging function is not 100% guaranteed to get a valid status. Zero may be supplied if the status is not known.
 func LoggingMiddleware(preLogFunc func(method, path string, start time.Time),
 	postLogFunc func(method, path string, status int, dur time.Duration)) negroni.Handler {
 
@@ -36,6 +37,7 @@ func LoggingMiddleware(preLogFunc func(method, path string, start time.Time),
 	}
 }
 
+// GzipMiddleware creates middleware to gzip responses. This should be declared at the bottom of your middleware chain.
 func GzipMiddleware() negroni.Handler {
 	return &gzipMiddleware{}
 }
