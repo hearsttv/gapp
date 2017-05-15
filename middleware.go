@@ -57,8 +57,12 @@ func (l *loggingMiddleware) ServeHTTP(rw http.ResponseWriter, r *http.Request, n
 	next(rw, r)
 
 	if l.postLogFunc != nil {
-		res := rw.(negroni.ResponseWriter)
-		l.postLogFunc(r.Method, r.URL.Path, res.Status(), time.Since(start))
+		res, ok := rw.(negroni.ResponseWriter)
+		if ok {
+			l.postLogFunc(r.Method, r.URL.Path, res.Status(), time.Since(start))
+		} else {
+			l.postLogFunc(r.Method, r.URL.Path, 0, time.Since(start))
+		}
 	}
 }
 
