@@ -1,16 +1,16 @@
-hash: f76017afabf7ad53cc166922c8f850a956815455065c1a88ee59a0f9b934aef8
-updated: 2017-04-05T15:40:40.310167066-07:00
+hash: 55b7c0c70c5d997ee5bfbd77d0da13443434578bff6c6d2dcb8eae1016a9e539
+updated: 2017-05-15T11:34:52.230887724-07:00
 imports:
-- name: github.com/codegangsta/negroni
-  version: fde5e16d32adc7ad637e9cd9ad21d4ebc6192535
 - name: github.com/gorilla/context
   version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
 - name: github.com/gorilla/mux
   version: 392c28fe23e1c45ddba891b0320b3b5df220beea
+- name: github.com/NYTimes/gziphandler
+  version: 22d4470af89e09998fc16b35029df973932df4ae
 - name: github.com/stretchr/graceful
   version: 4654dfbb6ad53cb5e27f37d99b02e16c1872fbbb
 - name: github.com/urfave/negroni
-  version: c0db5feaa33826cd5117930c8f4ee5c0f565eec6
+  version: fde5e16d32adc7ad637e9cd9ad21d4ebc6192535
 - name: gopkg.in/tylerb/graceful.v1
   version: 4654dfbb6ad53cb5e27f37d99b02e16c1872fbbb
 testImports:

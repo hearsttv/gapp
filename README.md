@@ -14,7 +14,7 @@ NOTE: Gapp is used interally by Hearst DPDG and may change. If you want to use G
 
 Gapp uses the following popular tools to construct webservices: 
 * **Gorilla Mux** (http://www.gorillatoolkit.org/pkg/mux)
-* **Negroni middleware** (https://github.com/codegangsta/negroni)
+* **Negroni middleware** (https://github.com/urfave/negroni)
 * **Graceful shutdown** (https://github.com/tylerb/graceful) 
 
 ## Use
