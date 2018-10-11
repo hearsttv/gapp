@@ -1,4 +1,5 @@
 ### Jira URL
+https://thetower.atlassian.net/browse/HTVDO-XXX
 URL of the corresponding Jira ticket. Should match smart commit.
 
 ### Description
